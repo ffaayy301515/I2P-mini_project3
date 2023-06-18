@@ -1,4 +1,5 @@
 #include <iostream>
+#include<fstream>
 #include <sstream>
 #include <cstdint>
 
@@ -11,9 +12,100 @@
  * 
  * @return int 
  */
-int State::evaluate(){
-  // [TODO] design your own evaluation function
-  return 0;
+int State::evaluate(int turn){
+    // [TODO] design your own evaluation function
+    int score = 0;
+    score += this->chess_value();
+    score += this->position_value();
+    return (player ? score : -score);
+}
+
+int State::chess_value(){
+    int val = 0;
+    for(int i=0; i<BOARD_H; i++){
+        for(int j=0; j<BOARD_W; j++){
+            if(board.board[0][i][j] == 1) val += 20;
+            if(board.board[0][i][j] == 2) val += 100;
+            if(board.board[0][i][j] == 3) val += 60;
+            if(board.board[0][i][j] == 4) val += 60;
+            if(board.board[0][i][j] == 5) val += 180;
+            if(board.board[0][i][j] == 6) val += 20000;
+            if(board.board[1][i][j] == 1) val -= 20;
+            if(board.board[1][i][j] == 2) val -= 100;
+            if(board.board[1][i][j] == 3) val -= 60;
+            if(board.board[1][i][j] == 4) val -= 60;
+            if(board.board[1][i][j] == 5) val -= 180;
+            if(board.board[1][i][j] == 6) val -= 20000;
+        }
+    }
+
+    return val;
+}
+
+int State::position_value(){
+    int val = 0;
+
+    int pawn_pos_val[6][5] = {
+      {10, 10, 10, 10, 10},
+      {2, 4, 6, 4, 2},
+      {2, 4, 6, 4, 2},
+      {1, 2, 5, 2 ,1},
+      {0, 0, 4, 0, 0},
+      {0, 0, 0, 0, 0}};
+    int rook_pos_val[6][5] = {
+      {0, 0, 0, 0, 0},
+      {1, 2, 2, 2, 1},
+      {-1, 0, 0, 0, -1},
+      {-1, 0, 0, 0, -1},
+      {-1, 0, 0, 0, -1},
+      {0, 0, 1, 0, 0}};
+    int knight_pos_val[6][5] = {
+      {-10, -8, -6, -8, -10},
+      {-8, -4, 0, -4, -8},
+      {-6, 0, 3, 0, -6},
+      {-6, 0, 3, 0, -6},
+      {-8, -4, 0, -4, -8},
+      {-10, -8, -6, -8, -10}};
+    int bishop_pos_val[6][5] = {
+      {-4, -2, -2, -2, -4},
+      {-2, 0, 0, 0, -2},
+      {-2, 1, 2, 1, -2},
+      {-2, 2, 2, 2, -2},
+      {-2, 1, 0, 1, -2},
+      {-4, -2, -2, -2, -4}};
+    int queen_pos_val[6][5] = {
+      {-4, -2, -1, -2, -4},
+      {-2, 0, 0, 0, -2},
+      {-2, 0, 1, 0, -2},
+      {-2, 1, 1, 0, -2},
+      {-2, 1, 0, 0, -1},
+      {-4, -2, -1, -2, -4}};
+    int king_pos_val[6][5] = {
+      {-6, -8, -10, -8, -6},
+      {-6, -8, -10, -8, -6},
+      {-6, -8, -10, -8, -6},
+      {-2, -4, -4, -4, -2},
+      {4, 4, 0 , 4, 4},
+      {4, 6, 0, 4, 6}};
+
+    for(int i=0; i<BOARD_H; i++){
+        for(int j=0; j<BOARD_W; j++){
+            if(board.board[0][i][j] == 1) val += pawn_pos_val[i][j];
+            if(board.board[0][i][j] == 2) val += rook_pos_val[i][j];
+            if(board.board[0][i][j] == 3) val += knight_pos_val[i][j];
+            if(board.board[0][i][j] == 4) val += bishop_pos_val[i][j];
+            if(board.board[0][i][j] == 5) val += queen_pos_val[i][j]; 
+            if(board.board[0][i][j] == 6) val += king_pos_val[i][j];
+            if(board.board[1][i][j] == 1) val -= pawn_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+            if(board.board[1][i][j] == 2) val -= rook_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+            if(board.board[1][i][j] == 3) val -= knight_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+            if(board.board[1][i][j] == 4) val -= bishop_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+            if(board.board[1][i][j] == 5) val -= queen_pos_val[BOARD_H-i-1][BOARD_W-j-1]; 
+            if(board.board[1][i][j] == 6) val -= king_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+        }
+    }
+
+    return val;
 }
 
 
