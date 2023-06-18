@@ -10,7 +10,7 @@
 class Minimax{
 private:
     
-    static int minimax(State *state, int depth, int turn, std::unordered_map<State*, int> table);
+    static int minimax(State *state, int depth, int turn);
 public:
     static Move get_move(State *state, int depth);
 };

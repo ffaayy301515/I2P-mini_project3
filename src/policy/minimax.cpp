@@ -22,11 +22,9 @@ Move Minimax::get_move(State *state, int depth){
     int best_val = INT32_MIN;
     Move best_move;
 
-    std::unordered_map<State*, int> table;
-
     for(auto act: actions){
         State* next_state = state->next_state(act);
-        int val = minimax(next_state, depth-1, 0, table);
+        int val = minimax(next_state, depth-1, 0);
         // delete next_state;
         if(val > best_val){
             best_move = act;
@@ -36,24 +34,21 @@ Move Minimax::get_move(State *state, int depth){
     return best_move;
 }
 
-int Minimax::minimax(State *state, int depth, int turn, std::unordered_map<State*, int> table){
-    // if(depth <= 0) return state->evaluate(turn);
+int Minimax::minimax(State *state, int depth, int my_turn){
+    // if(depth <= 0) return state->evaluate(my_turn);
     if(!state->legal_actions.size())
         state->get_legal_actions();
     auto actions = state->legal_actions;
 
-    if(depth <= 0 || (state->game_state == WIN || state->game_state == DRAW) || actions.empty()) 
-        return state->evaluate(turn);
+    if(depth <= 0 || actions.empty()) 
+        return my_turn ? -state->evaluate() : state->evaluate();
 
-    if(table.find(state) != table.end()) return table[state];
-
-    if(!turn){
+    if(my_turn){
         int max_val = INT32_MIN;
         for(auto act: actions){
             State* next_state = state->next_state(act);
-            int val = minimax(next_state, depth-1, 1, table);
+            int val = minimax(next_state, depth-1, 0);
             max_val = std::max(max_val, val);
-            table[next_state] = val;
         }
         return max_val;
     }
@@ -61,9 +56,8 @@ int Minimax::minimax(State *state, int depth, int turn, std::unordered_map<State
     int min_val = INT32_MAX;
     for(auto act: actions){
         State* next_state = state->next_state(act);
-        int val = minimax(next_state, depth-1, 0, table);
+        int val = minimax(next_state, depth-1, 1);
         min_val = std::min(min_val, val);
-        table[next_state] = val;
     }
     return min_val;
 }

@@ -1,9 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include<unordered_map>
 
 #include "../config.hpp"
 #include "../state/state.hpp"
-#include "../policy/minimax.hpp"
+#include "../policy/alphabeta.hpp"
 
 
 State* root;
@@ -40,9 +41,10 @@ void read_board(std::ifstream& fin) {
  */
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
+  std::unordered_map<std::string, int> table;
   while(true) {
     // Choose a random spot.
-    auto move = Minimax::get_move(root, 4);
+    auto move = Alphabeta::get_move(root, 4, table);
     fout << move.first.first << " " << move.first.second << " "\
          << move.second.first << " " << move.second.second << std::endl;
     

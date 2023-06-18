@@ -53,7 +53,7 @@ class State{
     State(Board board): board(board){};
     State(Board board, int player): board(board), player(player){};
     
-    int evaluate(int turn);
+    int evaluate();
     int chess_value();
     int position_value();
     State* next_state(Move move);

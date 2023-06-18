@@ -12,7 +12,7 @@
  * 
  * @return int 
  */
-int State::evaluate(int turn){
+int State::evaluate(){
     // [TODO] design your own evaluation function
     int score = 0;
     score += this->chess_value();
