@@ -17,25 +17,53 @@ int State::evaluate(){
     int score = 0;
     score += this->chess_value();
     score += this->position_value();
-    return (player ? score : -score);
+    return (player ? -score : score);
 }
 
 int State::chess_value(){
     int val = 0;
     for(int i=0; i<BOARD_H; i++){
         for(int j=0; j<BOARD_W; j++){
-            if(board.board[0][i][j] == 1) val += 20;
-            if(board.board[0][i][j] == 2) val += 100;
-            if(board.board[0][i][j] == 3) val += 60;
-            if(board.board[0][i][j] == 4) val += 60;
-            if(board.board[0][i][j] == 5) val += 180;
-            if(board.board[0][i][j] == 6) val += 20000;
-            if(board.board[1][i][j] == 1) val -= 20;
-            if(board.board[1][i][j] == 2) val -= 100;
-            if(board.board[1][i][j] == 3) val -= 60;
-            if(board.board[1][i][j] == 4) val -= 60;
-            if(board.board[1][i][j] == 5) val -= 180;
-            if(board.board[1][i][j] == 6) val -= 20000;
+            switch(board.board[0][i][j]){
+                case 1:
+                    val += 20;
+                    break;
+                case 2:
+                    val += 100;
+                    break;
+                case 3:
+                    val += 60;
+                    break;
+                case 4:
+                    val += 60;
+                    break;
+                case 5:
+                    val += 180;
+                    break;
+                case 6:
+                    val += 20000;
+                    break;
+            }
+            switch(board.board[1][i][j]){
+                case 1:
+                    val -= 20;
+                    break;
+                case 2:
+                    val -= 100;
+                    break;
+                case 3:
+                    val -= 60;
+                    break;
+                case 4:
+                    val -= 60;
+                    break;
+                case 5:
+                    val -= 180;
+                    break;
+                case 6:
+                    val -= 20000;
+                    break;
+            }
         }
     }
 
@@ -90,18 +118,46 @@ int State::position_value(){
 
     for(int i=0; i<BOARD_H; i++){
         for(int j=0; j<BOARD_W; j++){
-            if(board.board[0][i][j] == 1) val += pawn_pos_val[i][j];
-            if(board.board[0][i][j] == 2) val += rook_pos_val[i][j];
-            if(board.board[0][i][j] == 3) val += knight_pos_val[i][j];
-            if(board.board[0][i][j] == 4) val += bishop_pos_val[i][j];
-            if(board.board[0][i][j] == 5) val += queen_pos_val[i][j]; 
-            if(board.board[0][i][j] == 6) val += king_pos_val[i][j];
-            if(board.board[1][i][j] == 1) val -= pawn_pos_val[BOARD_H-i-1][BOARD_W-j-1];
-            if(board.board[1][i][j] == 2) val -= rook_pos_val[BOARD_H-i-1][BOARD_W-j-1];
-            if(board.board[1][i][j] == 3) val -= knight_pos_val[BOARD_H-i-1][BOARD_W-j-1];
-            if(board.board[1][i][j] == 4) val -= bishop_pos_val[BOARD_H-i-1][BOARD_W-j-1];
-            if(board.board[1][i][j] == 5) val -= queen_pos_val[BOARD_H-i-1][BOARD_W-j-1]; 
-            if(board.board[1][i][j] == 6) val -= king_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+            switch(board.board[0][i][j]){
+                case 1:
+                    val += pawn_pos_val[i][j];
+                    break;
+                case 2:
+                    val += rook_pos_val[i][j];
+                    break;
+                case 3:
+                    val += knight_pos_val[i][j];
+                    break;
+                case 4:
+                    val += bishop_pos_val[i][j];
+                    break;
+                case 5:
+                    val += queen_pos_val[i][j];
+                    break;
+                case 6:
+                    val += king_pos_val[i][j];
+                    break;
+            }
+            switch(board.board[1][i][j]){
+                case 1:
+                    val -= pawn_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+                case 2:
+                    val -= rook_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+                case 3:
+                    val -= knight_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+                case 4:
+                    val -= bishop_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+                case 5:
+                    val -= queen_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+                case 6:
+                    val -= king_pos_val[BOARD_H-i-1][BOARD_W-j-1];
+                    break;
+            }
         }
     }
 
@@ -299,7 +355,6 @@ void State::get_legal_actions(){
       }
     }
   }
-  std::cout << "\n";
   this->legal_actions = all_actions;
 }
 

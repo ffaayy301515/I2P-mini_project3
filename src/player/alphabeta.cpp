@@ -41,16 +41,17 @@ void read_board(std::ifstream& fin) {
  */
 void write_valid_spot(std::ofstream& fout) {
   // Keep updating the output until getting killed.
-  std::unordered_map<std::string, int> table;
+  int depth = 3;
   while(true) {
     // Choose a random spot.
-    auto move = Alphabeta::get_move(root, 4, table);
+    auto move = Alphabeta::get_move(root, depth);
     fout << move.first.first << " " << move.first.second << " "\
          << move.second.first << " " << move.second.second << std::endl;
     
     // Remember to flush the output to ensure the last action is written to file.
     fout.flush();
-    break;
+    depth += 1;
+    // break;
   }
 }
 
